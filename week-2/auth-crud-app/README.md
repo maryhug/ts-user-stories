@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# auth-crud-app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Semana 2 — Autenticación, CRUD y decoradores con React + TypeScript.
 
-## Available Scripts
+## Requisitos
 
-In the project directory, you can run:
+- Node.js 18+
+- npm 9+
 
-### `npm start`
+## Instalación y ejecución
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+npm install
+npm start
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Abre http://localhost:3000.
 
-### `npm test`
+## Credenciales de prueba
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Email | Contraseña | Rol |
+|---|---|---|
+| ana@demo.com | 1234 | admin |
+| carlos@demo.com | abcd | user |
+| maria@demo.com | pass123 | seller (inactiva — no puede entrar) |
 
-### `npm run build`
+## Cómo probar cada funcionalidad
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Login:** Ingresa con las credenciales de la tabla. Si usas las de María (cuenta inactiva) verás el mensaje de error.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**CRUD:** Una vez dentro del dashboard podés buscar usuarios por nombre, activar/desactivar y eliminar. Para ver los logs simulados de HTTP abre la consola del navegador con F12.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Decorador:** Crea un usuario nuevo desde el formulario del dashboard y revisa la consola — verás los mensajes del decorador `@withDefaults` antes y después del método `create`.
 
-### `npm run eject`
+## Estructura
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+src/
+├── components/       # (disponible para componentes reutilizables)
+├── data/
+│   └── users.ts      # Mock data de usuarios
+├── interfaces/
+│   └── User.ts       # Interface User y tipos relacionados
+├── utils/
+│   ├── auth.ts       # Función authenticate (login modular)
+│   ├── UserStore.ts  # Clase CRUD con logs HTTP simulados
+│   └── decorators.ts # Decorador @withDefaults
+├── views/
+│   ├── LoginView.tsx     # Vista de login con validación
+│   └── DashboardView.tsx # Vista principal con tabla CRUD
+└── App.tsx           # Enrutado condicional por estado de sesión
+```

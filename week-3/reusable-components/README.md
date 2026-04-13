@@ -1,46 +1,149 @@
-# Getting Started with Create React App
+# reusable-components
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Semana 3 — Componentes UI reutilizables con React + TypeScript:
+`Button`, `Badge` y `Card` con props tipadas y temas visuales.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Requisitos
 
-### `npm start`
+- Node.js 18+
+- npm 9+
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Instalación y ejecución
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+npm install
+npm start
+```
 
-### `npm test`
+Abre http://localhost:3000 para ver la galería de componentes.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Cómo crear este proyecto desde cero
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npx create-react-app reusable-components --template typescript
+cd reusable-components
+mkdir src/components src/interfaces
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Estructura del proyecto
 
-### `npm run eject`
+```
+src/
+├── components/
+│   ├── Button.tsx   # Botón con variantes, tamaños, loading e íconos
+│   ├── Badge.tsx    # Etiqueta de estado con colores semánticos
+│   └── Card.tsx     # Contenedor con tema de color, badges y footer
+├── interfaces/
+│   ├── Button.ts    # ButtonProps
+│   ├── Badge.ts     # BadgeProps
+│   └── Card.ts      # CardProps
+└── App.tsx          # Galería de demostración
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Referencia de componentes
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Button
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+| Prop | Tipo | Default | Descripción |
+|---|---|---|---|
+| `text` | `string` | — | **Obligatorio.** Texto del botón |
+| `variant` | `"primary" \| "secondary" \| "danger"` | `"primary"` | Estilo visual |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Tamaño del botón |
+| `disabled` | `boolean` | `false` | Deshabilita el botón |
+| `loading` | `boolean` | `false` | Muestra spinner y bloquea clics |
+| `leftIcon` | `React.ReactNode` | — | Ícono a la izquierda |
+| `rightIcon` | `React.ReactNode` | — | Ícono a la derecha |
+| `onClick` | `() => void` | — | Manejador de clic |
 
-## Learn More
+```tsx
+// Ejemplos de uso
+<Button text="Guardar" />
+<Button text="Eliminar" variant="danger" size="sm" />
+<Button text="Procesando" loading />
+<Button text="Exportar" leftIcon="📤" variant="secondary" />
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Badge
+
+| Prop | Tipo | Default | Descripción |
+|---|---|---|---|
+| `label` | `string` | — | **Obligatorio.** Texto del badge |
+| `status` | `"success" \| "warning" \| "info" \| "error" \| "neutral"` | `"neutral"` | Color semántico |
+| `icon` | `React.ReactNode` | — | Ícono antes del label |
+
+```tsx
+// Ejemplos de uso
+<Badge label="Activo" status="success" icon="✓" />
+<Badge label="Pendiente" status="warning" icon="⚠" />
+<Badge label="Sin stock" status="error" />
+```
+
+---
+
+### Card
+
+| Prop | Tipo | Default | Descripción |
+|---|---|---|---|
+| `title` | `string` | — | **Obligatorio.** Título de la card |
+| `type` | `"green" \| "white" \| "black"` | — | **Obligatorio.** Tema visual |
+| `subtitle` | `string` | — | Texto secundario |
+| `imageUrl` | `string` | — | URL de imagen de cabecera |
+| `badges` | `React.ReactNode` | — | Zona de badges (estados/categorías) |
+| `footer` | `React.ReactNode` | — | Zona inferior (botones de acción) |
+
+```tsx
+// Ejemplo de uso completo
+<Card
+  title="Producto X"
+  type="white"
+  subtitle="Descripción breve del producto"
+  imageUrl="https://ejemplo.com/imagen.jpg"
+  badges={<Badge label="Nuevo" status="info" icon="★" />}
+  footer={<Button text="Comprar" variant="primary" size="sm" />}
+/>
+```
+
+---
+
+## Cómo extender los componentes
+
+**Agregar una variante nueva a Button** — en `interfaces/Button.ts` agrega el nuevo valor al union type y en `Button.tsx` agrega su entrada en `variantStyles`:
+
+```typescript
+// interfaces/Button.ts
+variant?: "primary" | "secondary" | "danger" | "ghost"; // nuevo: ghost
+
+// components/Button.tsx
+ghost: {
+  backgroundColor: "transparent",
+  color: "#0d6efd",
+  border: "1px solid transparent",
+},
+```
+
+**Agregar un tema nuevo a Card** — mismo patrón: nuevo valor en el union type de `CardProps["type"]` y nueva entrada en `typeThemes`.
+
+---
+
+## Conceptos clave de TypeScript usados
+
+| Concepto | Dónde se usa | Para qué sirve |
+|---|---|---|
+| `interface` | Todas las interfaces | Define el contrato de props |
+| Union types `"a" \| "b"` | `variant`, `size`, `status`, `type` | Limita los valores válidos |
+| `React.ReactNode` | `leftIcon`, `badges`, `footer` | Acepta cualquier contenido JSX |
+| `NonNullable<T>` | Mapas de estilos en Button y Badge | Elimina `undefined` del tipo para usarlo como key |
+| `Record<K, V>` | `variantStyles`, `sizeStyles`, `typeThemes` | Tipado de objetos con claves conocidas |
+| Props opcionales `?` | Mayoría de props | El componente funciona sin ellas |
+| Valores por defecto | `variant = "primary"`, `size = "md"` | Comportamiento predecible sin configurar |

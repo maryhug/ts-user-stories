@@ -9,6 +9,8 @@
 
 import { User } from "../interfaces/User";
 import { mockUsers } from "../data/users";
+import { withDefaults } from "./decorators";
+
 
 export class UserStore {
     // Array interno de usuarios — privado para que nadie lo modifique directamente
@@ -42,6 +44,7 @@ export class UserStore {
     // Simula: POST /api/users
     // Nota: el decorador @withDefaults intercepta este método
     // ----------------------------------------------------------
+    @withDefaults
     create(userData: Omit<User, "id" | "createdAt" | "role">): User {
         console.log("[POST] /api/users — creando nuevo usuario", userData);
 

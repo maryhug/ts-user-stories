@@ -7,7 +7,7 @@
 // - Es más fácil de extender o reemplazar por una clase real con fetch()
 // ============================================================
 
-import { User } from "../interfaces/User";
+import type { User } from "../interfaces/User";
 import { mockUsers } from "../data/users";
 import { withDefaults } from "./decorators";
 

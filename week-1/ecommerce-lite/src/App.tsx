@@ -1,25 +1,59 @@
 // ============================================================
-// Componente raíz de la aplicación.
-// Importa los datos mock y los pasa al componente de listado.
+// Muestra productos y usuarios en dos
+// secciones separadas, navegables con pestañas simples.
 // ============================================================
 
-import React from "react";
+import React, { useState } from "react";
 import { products } from "./data/data";
+import { users } from "./data/data";
 import ProductList from "./components/ProductList";
+import UserList from "./components/UserList";
+
+// Tipo para controlar qué pestaña está activa
+type Tab = "products" | "users";
 
 const App: React.FC = () => {
+  // useState con tipo explícito: solo acepta valores del tipo Tab
+  const [activeTab, setActiveTab] = useState<Tab>("products");
+
   return (
       <div style={styles.app}>
-        {/* Header de la tienda */}
+        {/* Header */}
         <header style={styles.header}>
           <h1 style={styles.logo}>🛒 ecommerce-lite</h1>
           <p style={styles.subtitle}>Tu tienda TypeScript</p>
         </header>
 
-        {/* Contenido principal */}
+        {/* Navegación por pestañas */}
+        <nav style={styles.nav}>
+          <button
+              style={{
+                ...styles.tab,
+                ...(activeTab === "products" ? styles.tabActive : {}),
+              }}
+              onClick={() => setActiveTab("products")}
+          >
+            Productos ({products.filter((p) => p.isActive).length})
+          </button>
+          <button
+              style={{
+                ...styles.tab,
+                ...(activeTab === "users" ? styles.tabActive : {}),
+              }}
+              onClick={() => setActiveTab("users")}
+          >
+            Usuarios ({users.length})
+          </button>
+        </nav>
+
+        {/* Contenido según pestaña activa */}
         <main style={styles.main}>
-          {/* Pasamos los productos como prop; TypeScript verifica el tipo */}
-          <ProductList products={products} />
+          {activeTab === "products" && (
+              <ProductList products={products} />
+          )}
+          {activeTab === "users" && (
+              <UserList users={users} />
+          )}
         </main>
       </div>
   );
@@ -45,6 +79,28 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: "4px 0 0",
     fontSize: "14px",
     opacity: 0.8,
+  },
+  nav: {
+    backgroundColor: "#ffffff",
+    borderBottom: "1px solid #dee2e6",
+    padding: "0 40px",
+    display: "flex",
+    gap: "4px",
+  },
+  tab: {
+    padding: "14px 20px",
+    border: "none",
+    backgroundColor: "transparent",
+    fontSize: "14px",
+    fontWeight: 500,
+    color: "#6c757d",
+    cursor: "pointer",
+    borderBottom: "3px solid transparent",
+    transition: "all 0.2s",
+  },
+  tabActive: {
+    color: "#0d6efd",
+    borderBottom: "3px solid #0d6efd",
   },
   main: {
     maxWidth: "1200px",

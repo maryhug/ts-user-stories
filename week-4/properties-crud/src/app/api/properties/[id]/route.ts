@@ -10,21 +10,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Property from "@/database/models/Property";
 
-// Tipo que Next.js pasa como segundo argumento a los handlers
-interface RouteContext {
-    params: { id: string };
-}
-
 // ----------------------------------------------------------
 // PUT /api/properties/:id
 // Actualiza los campos enviados en el body para el documento con ese id
+// En Next.js 16+, params es una Promise que debe ser awaiteado
 // ----------------------------------------------------------
-export async function PUT(request: NextRequest, { params }: RouteContext) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    let id: string = "";
     try {
         await connectDB();
 
         const body = await request.json();
-        const { id } = params;
+        id = (await params).id;
 
         // findByIdAndUpdate con { new: true } retorna el documento ACTUALIZADO
         // runValidators: true aplica las validaciones del schema en el update
@@ -46,7 +43,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
             { status: 200 }
         );
     } catch (error) {
-        console.error(`[PUT /api/properties/${params.id}]`, error);
+        console.error(`[PUT /api/properties/${id}]`, error);
         return NextResponse.json(
             { success: false, message: "Error al actualizar la propiedad" },
             { status: 500 }
@@ -58,11 +55,14 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
 // DELETE /api/properties/:id
 // Elimina el documento con ese id de MongoDB
 // ----------------------------------------------------------
-export async function DELETE(_request: NextRequest, { params }: RouteContext) {
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    let id: string = "";
     try {
         await connectDB();
 
-        const deleted = await Property.findByIdAndDelete(params.id);
+        id = (await params).id;
+
+        const deleted = await Property.findByIdAndDelete(id);
 
         if (!deleted) {
             return NextResponse.json(
@@ -77,7 +77,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext) {
             { status: 200 }
         );
     } catch (error) {
-        console.error(`[DELETE /api/properties/${params.id}]`, error);
+        console.error(`[DELETE /api/properties/${id}]`, error);
         return NextResponse.json(
             { success: false, message: "Error al eliminar la propiedad" },
             { status: 500 }

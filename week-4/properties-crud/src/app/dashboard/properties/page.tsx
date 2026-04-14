@@ -91,12 +91,12 @@ export default function PropertiesPage() {
 
             if (editingId) {
                 // Modo edición: llamamos a updateProperty con el id y los cambios
-                await updateProperty(editingId, payload);
+                await updateProperty(editingId, payload as any);
                 showFeedback("Propiedad actualizada correctamente ✓", true);
                 setEditingId(null);
             } else {
                 // Modo creación: llamamos a postProperty con los datos del form
-                await postProperty(payload);
+                await postProperty(payload as any);
                 showFeedback("Propiedad creada correctamente ✓", true);
             }
 
@@ -113,7 +113,7 @@ export default function PropertiesPage() {
     // handleEdit — carga los datos de la propiedad en el formulario
     // ----------------------------------------------------------
     const handleEdit = (property: IProperty) => {
-        setEditingId(property._id!);
+        setEditingId(property._id ? String(property._id) : null);
         setForm({
             name: property.name,
             value: String(property.value),  // convertimos number a string para el input
@@ -253,7 +253,7 @@ export default function PropertiesPage() {
                     ) : (
                         <div style={styles.grid}>
                             {properties.map((property) => (
-                                <div key={property._id} style={styles.propertyCard}>
+                                <div key={String(property._id)} style={styles.propertyCard}>
                                     {/* Imagen de la propiedad */}
                                     {property.img ? (
                                         <img
@@ -295,7 +295,7 @@ export default function PropertiesPage() {
                                             Editar
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(property._id!)}
+                                            onClick={() => handleDelete(String(property._id!))}
                                             style={{ ...styles.btn, ...styles.btnDanger }}
                                         >
                                             Eliminar

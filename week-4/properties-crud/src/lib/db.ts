@@ -13,8 +13,10 @@
 
 import mongoose from "mongoose";
 
+
 // URI de conexión desde variables de entorno (nunca hardcodear credenciales)
 const MONGODB_URI = process.env.MONGODB_URI as string;
+console.log("[DEBUG] URI:", JSON.stringify(process.env.MONGODB_URI));
 
 if (!MONGODB_URI) {
     throw new Error(

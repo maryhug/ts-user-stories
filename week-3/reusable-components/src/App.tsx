@@ -82,7 +82,7 @@ const cardData: CardData[] = [
         title: "Bicicleta Trail King 29\"",
         subtitle: "Marco de aluminio. 21 velocidades. Frenos de disco hidráulicos.",
         type: "green",
-        imageUrl: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
+        imageUrl: "https://plus.unsplash.com/premium_photo-1678718713393-2b88cde9605b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         badgeLabel: "Disponible",
         badgeStatus: "success",
         badgeIcon: "✓",
